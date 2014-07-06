@@ -34,14 +34,15 @@ def score(hand):
 
     Returns an integer score 
     """
-    res = [0,0,0,0,0,0]
-    for val in hand:
-        if val:
-            res[val-1] = res[val-1] + 1
-    sumval = res[0]
-    for index in range(1,len(res)):
-        if res[index]*(index+1)>sumval:
-            sumval = res[index]*(index+1)
+    
+    if len(hand)>0:
+        res = {}
+        for val in hand:
+            if val not in res.keys():
+                res[val] = val
+            else:
+                res[val] = res[val] + val
+        sumval = max(res.values())
     return sumval
 
 
@@ -56,6 +57,7 @@ def expected_value(held_dice, num_die_sides, num_free_dice):
 
     Returns a floating point expected value
     """
+    
     outcome = []
     sumval = 0
     for index in range(1,num_die_sides+1):
@@ -79,6 +81,7 @@ def gen_all_holds(hand):
 
     Returns a set of tuples, where each tuple is dice to hold
     """
+    
     hands = list(hand)
     masks = [list(elem) for elem in gen_all_sequences((0,1),len(hand))]
     final = []
@@ -103,15 +106,15 @@ def strategy(hand, num_die_sides):
     Returns a tuple where the first element is the expected score and
     the second element is a tuple of the dice to hold
     """
+    
     hold_list = gen_all_holds(hand)
     maxval = 0.0
     hold = ()
     for item in hold_list:
-        if item:
-            expval = expected_value(item,num_die_sides,num_die_sides-len(item))
-            if maxval>expval:
-                maxval = expval
-                hold = item
+        expval = expected_value(item,num_die_sides,len(hand)-len(item))
+        if maxval < expval:
+            maxval = expval
+            hold = item
             
     return (maxval, hold)
 
@@ -131,9 +134,3 @@ run_example()
 
 #import poc_holds_testsuite
 #poc_holds_testsuite.run_suite(gen_all_holds)
-#import user35_uLOFnLQSJV29rFh_5 as expected_value_testsuite
-#expected_value_testsuite.run_suite(expected_value)
-#import user35_oGFuhcPNLh_0 as score_testsuite
-#score_testsuite.run_suite(score)
-#import user35_mGREPnDxbs_0 as strategy_testsuite
-#strategy_testsuite.run_suite(strategy)
