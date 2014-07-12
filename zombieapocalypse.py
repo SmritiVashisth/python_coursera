@@ -126,11 +126,11 @@ class Zombie(poc_grid.Grid):
         
         boundary = poc_queue.Queue()
         
-        if entity_type == 'ZOMBIE':
+        if entity_type == ZOMBIE:
             for item in self._zombie_list:
                 boundary.enqueue(item)
             
-        if entity_type == 'HUMAN':
+        if entity_type == HUMAN:
             for item in self._human_list:
                 boundary.enqueue(item)
                 
@@ -140,9 +140,11 @@ class Zombie(poc_grid.Grid):
             distance_field[cell[0]][cell[1]] = 0
             while len(boundary) > 0:
                 current_cell = boundary.dequeue()
-                neighbours = poc_grid.Grid.four_neighbors(self,current_cell[0],current_cell[1])
+                neighbours = poc_grid.Grid.four_neighbors(self,current_cell[0],
+                                                          current_cell[1])
                 for neighbour_cell in neighbours:
-                    if visited.is_empty(neighbour_cell[0],neighbour_cell[1]) and self.is_empty(neighbour_cell[0],neighbour_cell[1]):
+                    if visited.is_empty(neighbour_cell[0],neighbour_cell[1]) and 
+                    self.is_empty(neighbour_cell[0],neighbour_cell[1]):
                         visited.set_full(neighbour_cell[0],neighbour_cell[1])
                         boundary.enqueue(neighbour_cell)
                         distance_field[neighbour_cell[0]][neighbour_cell[1]] = min(distance_field[neighbour_cell[0]][neighbour_cell[1]],
