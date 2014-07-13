@@ -57,7 +57,6 @@ class Zombie(poc_grid.Grid):
         Add zombie to the zombie list
         """
         self._zombie_list.append((row,col))
-        self.set_full(row,col)
                 
     def num_zombies(self):
         """
@@ -76,15 +75,12 @@ class Zombie(poc_grid.Grid):
             yield self._zombie_list[index]
             index = index + 1
         return
-        #for cell in self._zombie_list:
-           # yield cell
 
     def add_human(self, row, col):
         """
         Add human to the human list
         """
         self._human_list.append((row,col))
-        self.set_full(row,col)
         
     def num_humans(self):
         """
@@ -102,8 +98,6 @@ class Zombie(poc_grid.Grid):
             yield self._human_list[index]
             index = index + 1
         return
-        #for cell in self._human_list:
-            #yield cell
         
     def compute_distance_field(self, entity_type):
         """
@@ -130,7 +124,7 @@ class Zombie(poc_grid.Grid):
             for item in self._zombie_list:
                 boundary.enqueue(item)
             
-        if entity_type == HUMAN:
+        elif entity_type == HUMAN:
             for item in self._human_list:
                 boundary.enqueue(item)
                 
@@ -140,11 +134,9 @@ class Zombie(poc_grid.Grid):
             distance_field[cell[0]][cell[1]] = 0
             while len(boundary) > 0:
                 current_cell = boundary.dequeue()
-                neighbours = poc_grid.Grid.four_neighbors(self,current_cell[0],
-                                                          current_cell[1])
+                neighbours = poc_grid.Grid.four_neighbors(self,current_cell[0],current_cell[1])
                 for neighbour_cell in neighbours:
-                    if visited.is_empty(neighbour_cell[0],neighbour_cell[1]) and 
-                    self.is_empty(neighbour_cell[0],neighbour_cell[1]):
+                    if visited.is_empty(neighbour_cell[0],neighbour_cell[1]) and self.is_empty(neighbour_cell[0],neighbour_cell[1]):
                         visited.set_full(neighbour_cell[0],neighbour_cell[1])
                         boundary.enqueue(neighbour_cell)
                         distance_field[neighbour_cell[0]][neighbour_cell[1]] = min(distance_field[neighbour_cell[0]][neighbour_cell[1]],
@@ -168,9 +160,7 @@ class Zombie(poc_grid.Grid):
                 if maxval < zombie_distance[item[0]][item[1]]:
                     maxval = zombie_distance[item[0]][item[1]]
                     maxpos = item
-                self.set_empty(item[0],item[1])
             temp.append(maxpos)
-            self.set_full(maxpos[0],maxpos[1])
             
         self._human_list = temp
         
@@ -189,9 +179,7 @@ class Zombie(poc_grid.Grid):
                 if minval > human_distance[item[0]][item[1]]:
                     minval = human_distance[item[0]][item[1]]
                     minpos = item
-                self.set_empty(item[0],item[1])
             temp.append(minpos)
-            self.set_full(minpos[0],minpos[1])
             
         self._zombie_list = temp
 
