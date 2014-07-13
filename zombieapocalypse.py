@@ -132,17 +132,17 @@ class Zombie(poc_grid.Grid):
         for cell in boundary:
             visited.set_full(cell[0],cell[1])
             distance_field[cell[0]][cell[1]] = 0
-            while len(boundary) > 0:
-                current_cell = boundary.dequeue()
-                neighbours = poc_grid.Grid.four_neighbors(self,current_cell[0],current_cell[1])
-                for neighbour_cell in neighbours:
-                    if visited.is_empty(neighbour_cell[0],neighbour_cell[1]) and self.is_empty(neighbour_cell[0],neighbour_cell[1]):
-                        visited.set_full(neighbour_cell[0],neighbour_cell[1])
-                        boundary.enqueue(neighbour_cell)
-                        distance_field[neighbour_cell[0]][neighbour_cell[1]] = min(distance_field[neighbour_cell[0]][neighbour_cell[1]],
-                        distance_field[current_cell[0]][current_cell[1]]+1)
+            
+        while len(boundary) > 0:
+            current_cell = boundary.dequeue()
+            neighbours = poc_grid.Grid.four_neighbors(self,current_cell[0],current_cell[1])
+            for neighbour_cell in neighbours:
+                if visited.is_empty(neighbour_cell[0],neighbour_cell[1]) and poc_grid.Grid.is_empty(self,neighbour_cell[0],neighbour_cell[1]):
+                    visited.set_full(neighbour_cell[0],neighbour_cell[1])
+                    distance_field[neighbour_cell[0]][neighbour_cell[1]] = min(distance_field[neighbour_cell[0]][neighbour_cell[1]],
+                    distance_field[current_cell[0]][current_cell[1]]+1)
+                    boundary.enqueue(neighbour_cell)
                 
-        
         return distance_field
                 
         
